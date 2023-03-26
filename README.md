@@ -14,9 +14,32 @@ Install this plugin with [Fisher][fisher]:
 fisher install gregorias/bookmarks.fish
 ```
 
+I recommend setting up aliases in your `config.fish`:
+
+```fish
+alias d 'bf delete'
+alias g 'bf go'
+alias s 'bf save'
+```
+
 ## 🚀 Usage
 
 Bookmarks installs a single command for controlling your bookmarks, `bf`.
+
+```fish
+~ $ s home
+~ $ cd .config/fish
+.config/fish $ s fish
+.config/fish $ g home
+~ $ bf list
+home       /Users/grzesiek
+fish       /Users/grzesiek/.config/fish
+~ $ bf print home
+/Users/grzesiek
+~ $ bf delete fish
+~ $ bf list
+home       /Users/grzesiek
+```
 
 ### BFDIRS
 
