@@ -18,6 +18,15 @@ fisher install gregorias/bookmarks.fish
 
 Bookmarks installs a single command for controlling your bookmarks, `bf`.
 
+### BFDIRS
+
+Bookmarks uses `BFDIRS` variable to point to the bookmarks file
+(default `~/.bfdirs`).
+
+The BFDIRS file is a key-value CSV file. Values represent directory paths
+and can be arbitrary strings. Keys represent bookmark names. Keys can not
+contain CSV (`"`, `,`) or regex special characters.
+
 ## 🙏 Credits
 
 I was inspired by [Fishmarks][fishmarks]. I created Bookmarks to fix some
