@@ -1,3 +1,7 @@
+function _bf_csv_escape
+    sed -E 's/"/""/' | sed -E 's/^(.*)$/"\1"/'
+end
+
 function _bf_delete_bookmark
     function __bf_delete_bookmark_print_help
         printf "%s\n" \
@@ -145,6 +149,53 @@ function _bf_print_bookmark
     cat $BFDIRS | grep $argv[1], | csvcut -H -c2 | tail -n+2 | _bf_csv_unescape
 end
 
+function _bf_save_bookmark
+    function __bf_save_bookmark_print_help
+        printf "%s\n" \
+            "bf save — Save a bookmark." \
+            "" \
+            "bf save [-h | --help]" \
+            "bf save [OPTIONS...] BOOKMARK — Saves the CWD under BOOKMARK." \
+            "bf save [OPTIONS...] BOOKMARK VALUE — Saves VALUE under BOOKMARK." \
+            "" \
+            "Options:" \
+            "  -h, --help" \
+            "    Show this help message." \
+            "" \
+            "  --force" \
+            "    Saves the bookmark even if it already exists."
+    end
+
+    argparse h/help force -- $argv
+
+    if set -ql _flag_h
+        __bf_save_bookmark_print_help
+        return 0
+    end
+
+    if [ (count $argv) -lt 1 ]
+        echo -e "\033[0;31mERROR: bookmark name required.\033[00m" >&2
+        return 1
+    end
+
+    # Bookmark names are used in regexpes, so make sure we don't need to escape them.
+    #
+    # Commas, double quotes, and newlines are special characters in CSV files.
+    if echo $argv[1] | grep -q '[][",^$()\\]'
+        echo -e "\033[0;31mERROR: Bookmark names can not contain commas, double colons, and regex special characters.\033[00m" >&2
+        return 1
+    end
+
+    set -l matches (cat $BFDIRS | csvgrep -H -c1 --regex "^$argv[1]\$" | csvcut -c2)
+    if [ (printf "%s\n" $matches | wc -l) -gt 1 ]
+        echo -e "\033[0;31mERROR: '$argv[1]' bookmark alreadys exists. Delete it first.\033[00m" >&2
+        return 1
+    end
+
+    echo "$argv[1],"(pwd | _bf_csv_escape) >>$BFDIRS
+
+end
+
 function bf --description "Manage Fish bookmarks"
     function __bf_print_help
         printf "%s\n" \
@@ -161,7 +212,8 @@ function bf --description "Manage Fish bookmarks"
             "  delete  Delete a bookmark." \
             "  go      Change CWD to a bookmark." \
             "  list    List bookmarks." \
-            "  print   Print a bookmark's value."
+            "  print   Print a bookmark's value." \
+            "  save    Bookmark a directory."
     end
 
     switch $argv[1]
@@ -175,6 +227,8 @@ function bf --description "Manage Fish bookmarks"
             _bf_list_bookmarks $argv[2..]
         case print
             _bf_print_bookmark $argv[2..]
+        case save
+            _bf_save_bookmark $argv[2..]
         case '*'
             __bf_print_help
             return 1
