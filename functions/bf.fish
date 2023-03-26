@@ -209,24 +209,34 @@ function bf --description "Manage Fish bookmarks"
             "    Show this help message." \
             "" \
             "Commands:" \
-            "  delete  Delete a bookmark." \
-            "  go      Change CWD to a bookmark." \
-            "  list    List bookmarks." \
-            "  print   Print a bookmark's value." \
-            "  save    Bookmark a directory."
+            "  d, delete  Delete a bookmark." \
+            "  g, go      Change CWD to a bookmark." \
+            "  l, list    List bookmarks." \
+            "  p, print   Print a bookmark's value." \
+            "  s, save    Bookmark a directory."
     end
 
     switch $argv[1]
         case -h --help
             __bf_print_help
+        case d
+            _bf_delete_bookmark $argv[2..]
         case delete
             _bf_delete_bookmark $argv[2..]
+        case g
+            _bf_go_to_bookmark $argv[2..]
         case go
             _bf_go_to_bookmark $argv[2..]
+        case l
+            _bf_list_bookmarks $argv[2..]
         case list
             _bf_list_bookmarks $argv[2..]
+        case p
+            _bf_print_bookmark $argv[2..]
         case print
             _bf_print_bookmark $argv[2..]
+        case s
+            _bf_save_bookmark $argv[2..]
         case save
             _bf_save_bookmark $argv[2..]
         case '*'
