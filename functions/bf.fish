@@ -1,3 +1,37 @@
+function _bf_delete_bookmark
+    function __bf_delete_bookmark_print_help
+        printf "%s\n" \
+            "bf delete — Delete a bookmark." \
+            "" \
+            "bf delete [-h | --help]" \
+            "bf delete BOOKMARK" \
+            "" \
+            "Options:" \
+            "  -h, --help" \
+            "    Show this help message."
+    end
+
+    argparse h/help -- $argv
+
+    if set -ql _flag_h
+        __bf_delete_bookmark_print_help
+        return 0
+    end
+
+    if [ (count $argv) -eq 0 ]
+        __bf_delete_bookmark_print_help >&2
+        return 1
+    end
+
+    set -l matches (cat $BFDIRS | csvgrep -H -c1 --regex "^$argv[1]\$" | csvcut -c2)
+    if [ (printf "%s\n" $matches | wc -l) -le 1 ]
+        echo -e "\033[0;31mERROR: '$argv[1]' bookmark does not exist.\033[00m" >&2
+        return 1
+    end
+
+    sed -i -E "/^$argv[1],/d" $BFDIRS
+end
+
 function _bf_go_to_bookmark
     function __bf_go_to_bookmark_print_help
         printf "%s\n" \
@@ -124,6 +158,7 @@ function bf --description "Manage Fish bookmarks"
             "    Show this help message." \
             "" \
             "Commands:" \
+            "  delete  Delete a bookmark." \
             "  go      Change CWD to a bookmark." \
             "  list    List bookmarks." \
             "  print   Print a bookmark's value."
@@ -132,6 +167,8 @@ function bf --description "Manage Fish bookmarks"
     switch $argv[1]
         case -h --help
             __bf_print_help
+        case delete
+            _bf_delete_bookmark $argv[2..]
         case go
             _bf_go_to_bookmark $argv[2..]
         case list
