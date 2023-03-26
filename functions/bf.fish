@@ -40,6 +40,40 @@ function _bf_go_to_bookmark
     end
 end
 
+function _bf_print_bookmark
+    function __bf_print_bookmark_print_help
+        printf "%s\n" \
+            "bf print — Print a bookmark." \
+            "" \
+            "bf print [-h | --help]" \
+            "bf print [OPTIONS...] BOOKMARK — Prints BOOKMARK's value." \
+            "" \
+            "Options:" \
+            "  -h, --help" \
+            "    Show this help message."
+    end
+
+    argparse h/help csv -- $argv
+
+    if set -ql _flag_h
+        __bf_print_bookmark_print_help
+        return 0
+    end
+
+    if [ (count $argv) -lt 1 ]
+        echo -e "\033[0;31mERROR: bookmark name required\033[00m" >&2
+        return 1
+    end
+
+    set -l matches (cat $BFDIRS | csvgrep -H -c1 --regex "^$argv[1]\$" | csvcut -c2)
+    if [ (printf "%s\n" $matches | wc -l) -le 1 ]
+        echo -e "\033[0;31mERROR: '$argv[1]' bookmark does not exist.\033[00m" >&2
+        return 1
+    end
+
+    cat $BFDIRS | grep $argv[1], | csvcut -H -c2 | tail -n+2 | _bf_csv_unescape
+end
+
 function bf --description "Manage Fish bookmarks"
     function __bf_print_help
         printf "%s\n" \
@@ -53,7 +87,8 @@ function bf --description "Manage Fish bookmarks"
             "    Show this help message." \
             "" \
             "Commands:" \
-            "  go      Change CWD to a bookmark."
+            "  go      Change CWD to a bookmark." \
+            "  print   Print a bookmark's value."
     end
 
     switch $argv[1]
@@ -61,6 +96,8 @@ function bf --description "Manage Fish bookmarks"
             __bf_print_help
         case go
             _bf_go_to_bookmark $argv[2..]
+        case print
+            _bf_print_bookmark $argv[2..]
         case '*'
             __bf_print_help
             return 1
