@@ -57,11 +57,16 @@ contain CSV (`"`, `,`) or regex special characters.
 I was inspired by [Fishmarks][fishmarks]. I created Bookmarks to fix some
 problems that I had with Fishmarks:
 
-* Live completion that recomputes suggestions on directory changes.
-* Less restrictions on bookmark names. Particularly allow hyphens.
-* One central command with completions and help.
-* No default aliases that take the prime single letter space that also
-  conflicts with Fasd.
+* Bookmarks has live completion that recomputes suggestions on directory
+  changes.
+* Bookmarks has less restrictions on bookmark names. Particularly, it allows
+  hyphens.
+* Bookmarks has one central command with completions and help.
+* Bookmarks is compatible with Fish plugin managers like [Fisher][fisher].
+* Bookmarks is compatible with [CLI Guidelines](https://clig.dev/). It provides
+  `--plain` command versions where applicable.
+* Bookmarks has no default aliases that take the prime single letter space that
+  also conflict with Fasd.
 
 [Fish]: https://fishshell.com/
 [csvkit]: https://csvkit.readthedocs.io
