@@ -52,6 +52,10 @@ The BFDIRS file is a key-value CSV file. Values represent directory paths
 and can be arbitrary strings. Keys represent bookmark names. Keys can not
 contain CSV (`"`, `,`) or regex special characters.
 
+> **Warning**
+> Bookmarks doesn't support newlines in bookmark names or filenames. For more
+> information, see DEV.md.
+
 ## 🙏 Credits
 
 I was inspired by [Fishmarks][fishmarks]. I created Bookmarks to fix some

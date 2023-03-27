@@ -1,5 +1,5 @@
 function _bf_csv_escape
-    sed -E 's/"/""/' | sed -E 's/^(.*)$/"\1"/'
+    sed -E 's/"/""/g' | sed -E 's/^(.*)$/"\1"/'
 end
 
 function _bf_delete_bookmark
@@ -185,10 +185,19 @@ function _bf_save_bookmark
         echo -e "\033[0;31mERROR: Bookmark names can not contain commas, double colons, and regex special characters.\033[00m" >&2
         return 1
     end
+    if string match -q '*'\n'*' $argv[1]
+        echo -e "\033[0;31mERROR: Bookmark names can not contain newlines.\033[00m" >&2
+        return 1
+    end
 
     set -l matches (cat $BFDIRS | csvgrep -H -c1 --regex "^$argv[1]\$" | csvcut -c2)
     if [ (printf "%s\n" $matches | wc -l) -gt 1 ]
         echo -e "\033[0;31mERROR: '$argv[1]' bookmark already exists. Delete it first.\033[00m" >&2
+        return 1
+    end
+
+    if string match -q '*'\n'*' $PWD
+        echo -e "\033[0;31mERROR: Bookmark paths can not contain newlines.\033[00m" >&2
         return 1
     end
 

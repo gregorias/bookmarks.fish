@@ -45,6 +45,19 @@ Fortunately, it's relatively easy to encode any string in CSV.
 I don't allow arbitrary string keys, so that Bookmarks can run quick regexp
 searches over it without worrying about escaping anything.
 
+#### Newlines
+
+We don't accept newlines as bookmark names or values, because the current tools
+don't allow clean separation of newlines that are a part of a filename and
+newlines that are terminating a CSV entry.
+
+Implementing this in a proper programming language is out of the question,
+because I don't want to deal with non-Fisher distribution.
+
+We'll need to wait for [Csvkit to add a functionality to output CSV rows with
+NULL item deliminators](https://github.com/wireservice/csvkit/issues/1196).
+With that and `string split0`, we can implement newlines support.
+
 [fishmarks]: https://github.com/techwizrd/fishmarks
 [csvkit]: https://csvkit.readthedocs.io
 [Act]: https://github.com/nektos/act
