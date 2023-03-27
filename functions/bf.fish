@@ -188,7 +188,7 @@ function _bf_save_bookmark
 
     set -l matches (cat $BFDIRS | csvgrep -H -c1 --regex "^$argv[1]\$" | csvcut -c2)
     if [ (printf "%s\n" $matches | wc -l) -gt 1 ]
-        echo -e "\033[0;31mERROR: '$argv[1]' bookmark alreadys exists. Delete it first.\033[00m" >&2
+        echo -e "\033[0;31mERROR: '$argv[1]' bookmark already exists. Delete it first.\033[00m" >&2
         return 1
     end
 
