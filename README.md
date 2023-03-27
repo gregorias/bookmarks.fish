@@ -19,6 +19,8 @@ I recommend setting up aliases in your `config.fish`:
 ```fish
 alias d 'bf delete'
 alias g 'bf go'
+alias l 'bf list'
+alias p 'bf print'
 alias s 'bf save'
 ```
 
@@ -31,13 +33,13 @@ Bookmarks installs a single command for controlling your bookmarks, `bf`.
 ~ $ cd .config/fish
 .config/fish $ s fish
 .config/fish $ g home
-~ $ bf list
+~ $ l
 home       /Users/grzesiek
 fish       /Users/grzesiek/.config/fish
-~ $ bf print home
+~ $ p home
 /Users/grzesiek
-~ $ bf delete fish
-~ $ bf list
+~ $ d fish
+~ $ l
 home       /Users/grzesiek
 ```
 
