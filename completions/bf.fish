@@ -11,3 +11,4 @@ complete -c bf -n "__fish_seen_subcommand_from list" -lplain
 complete -c bf -n "__fish_seen_subcommand_from print" -sh -lhelp
 complete -c bf -n "__fish_seen_subcommand_from print" -a "(_bf_list_keys $BFDIRS)"
 complete -c bf -n "__fish_seen_subcommand_from save" -sh -lhelp
+complete -c bf -n "__fish_seen_subcommand_from save" -lforce

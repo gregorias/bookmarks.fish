@@ -24,3 +24,9 @@ bf save baz 2>/dev/null
 true >$BFDIRS
 bf save baz /foobar
 @test "bf saves provided values" (bf print baz) = /foobar
+
+true >$BFDIRS
+bf save baz /foobar
+bf save --force baz /barfoo
+@test "bf saves --force works (status)" $status -eq 0
+@test "bf saves --force works (value)" (bf print baz) = /barfoo

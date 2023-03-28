@@ -177,22 +177,17 @@ function _bf_save_bookmark
         echo -e "\033[0;31mERROR: bookmark name required.\033[00m" >&2
         return 1
     end
+    set -f key $argv[1]
 
     # Bookmark names are used in regexpes, so make sure we don't need to escape them.
     #
     # Commas, double quotes, and newlines are special characters in CSV files.
-    if echo $argv[1] | grep -q '[][",^$()\\]'
+    if echo $key | grep -q '[][",^$()\\]'
         echo -e "\033[0;31mERROR: Bookmark names can not contain commas, double colons, and regex special characters.\033[00m" >&2
         return 1
     end
-    if string match -q '*'\n'*' $argv[1]
+    if string match -q '*'\n'*' $key
         echo -e "\033[0;31mERROR: Bookmark names can not contain newlines.\033[00m" >&2
-        return 1
-    end
-
-    set -l matches (cat $BFDIRS | csvgrep -H -c1 --regex "^$argv[1]\$" | csvcut -c2)
-    if [ (printf "%s\n" $matches | wc -l) -gt 1 ]
-        echo -e "\033[0;31mERROR: '$argv[1]' bookmark already exists. Delete it first.\033[00m" >&2
         return 1
     end
 
@@ -205,6 +200,20 @@ function _bf_save_bookmark
     if string match -q '*'\n'*' $value
         echo -e "\033[0;31mERROR: Bookmark paths can not contain newlines.\033[00m" >&2
         return 1
+    end
+
+    set -l matches (cat $BFDIRS | csvgrep -H -c1 --regex "^$key\$" | csvcut -c2)
+    if [ \( (printf "%s\n" $matches | wc -l) -gt 1 \) ]
+        if set -ql _flag_force
+            set -l tmp (mktemp)
+            cat $BFDIRS | string match --invert "$key,*" >$tmp
+            echo "$argv[1],"(echo -n $value | _bf_csv_escape) >>$tmp \
+                && mv $tmp $BFDIRS
+            return $status
+        else
+            echo -e "\033[0;31mERROR: '$argv[1]' bookmark already exists. Delete it first.\033[00m" >&2
+            return 1
+        end
     end
 
     echo "$argv[1],"(echo -n $value | _bf_csv_escape) >>$BFDIRS
