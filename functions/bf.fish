@@ -196,13 +196,18 @@ function _bf_save_bookmark
         return 1
     end
 
-    if string match -q '*'\n'*' $PWD
+    if [ (count $argv) -ge 2 ]
+        set -f value $argv[2]
+    else
+        set -f value $PWD
+    end
+
+    if string match -q '*'\n'*' $value
         echo -e "\033[0;31mERROR: Bookmark paths can not contain newlines.\033[00m" >&2
         return 1
     end
 
-    echo "$argv[1],"(pwd | _bf_csv_escape) >>$BFDIRS
-
+    echo "$argv[1],"(echo -n $value | _bf_csv_escape) >>$BFDIRS
 end
 
 function bf --description "Manage Fish bookmarks"

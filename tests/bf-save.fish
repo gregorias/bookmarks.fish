@@ -20,3 +20,7 @@ set BAZ (mktemp -d)
 cd $BAZ
 bf save baz 2>/dev/null
 @test "bf saves new directories" (bf print baz) = $BAZ
+
+true >$BFDIRS
+bf save baz /foobar
+@test "bf saves provided values" (bf print baz) = /foobar
