@@ -52,6 +52,10 @@ the ecosystem.
 Implementing this in a proper programming language is out of the question,
 because I don't want to deal with non-Fisher distribution.
 
+2023-03-28: Now that I think about it. I could add support for newlines in
+filenames by escaping them and rely on eval to put them back in. Not doing that
+due to priorities in life.
+
 [csvkit]: https://csvkit.readthedocs.io
 [Act]: https://github.com/nektos/act
 [Commitlint]: https://github.com/conventional-changelog/commitlint
