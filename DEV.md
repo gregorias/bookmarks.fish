@@ -24,7 +24,7 @@ lefthook install
 
 This section describes some explicit design decisions for this tool.
 
-### On file farmet
+### On file format
 
 Bookmarks uses home-made as the file format for BFDIRS to reuse. Its desirable
 benefits are:

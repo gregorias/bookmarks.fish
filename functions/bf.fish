@@ -15,6 +15,16 @@ function _bf_delete_bookmark_entry_by_name --description 'Deletes a bookmark ent
     cat $BFDIRS | string match --invert "$argv[1],*"
 end
 
+# A counterpart to _bf_fish_expand. For every string FOO, `[_bf_fish_expand (_bf_fish_escape FOO) = FOO]`
+function _bf_fish_escape --description "Escapes a Fish string"
+    echo \'"$(string replace \' \\\' $argv[1])"\'
+end
+
+# A counterpart to _bf_fish_escape.
+function _bf_fish_expand --description "Expands a string using Fish"
+    eval "echo $argv[1]"
+end
+
 function _bf_delete_bookmark
     function __bf_delete_bookmark_print_help
         printf "%s\n" \
@@ -84,7 +94,9 @@ function _bf_go_to_bookmark
         return 1
     end
 
-    set -l target (echo -n $matches[1] | _bf_extract_value)
+    set -l unexpanded_target (echo -n $matches[1] | _bf_extract_value)
+    set -l target "$(_bf_fish_expand $unexpanded_target)"
+
 
     if [ -d $target ]
         cd $target
@@ -162,7 +174,7 @@ function _bf_print_bookmark
         return 1
     end
 
-    echo $matches[1] | _bf_extract_value
+    _bf_fish_expand (echo $matches[1] | _bf_extract_value)
 end
 
 function _bf_save_bookmark
@@ -209,7 +221,7 @@ function _bf_save_bookmark
     if [ (count $argv) -ge 2 ]
         set -f value $argv[2]
     else
-        set -f value $PWD
+        set -f value "$(_bf_fish_escape $PWD)"
     end
 
     # Newlines end entries.
