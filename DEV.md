@@ -24,41 +24,34 @@ lefthook install
 
 This section describes some explicit design decisions for this tool.
 
-### On CSV
+### On file farmet
 
-Bookmarks uses CSV as the file format for BFDIRS to reuse. Its desirable
+Bookmarks uses home-made as the file format for BFDIRS to reuse. Its desirable
 benefits are:
 
 - It's a human-readable format.
-- I can easily reuse available tools ([csvkit]) to parse and query the file.
+- It can be easily parsed with internal Fish tools.
 
-Using a custom format ala [Fishmarks][fishmarks] would mean having to implement
-custom parsing and formatting logic for no benefit.
+### On CSV
 
-Having to depend on an external tool is not a problem for me.
+A previous version of Bookmarks depended on [Csvkit][csvkit]. Bookmarks has
+decided not to use it, because it's slow. A single call takes 100ms (compared
+to microseconds for string-replaced), which leads to noticable delays.
 
 ### On encoding
 
-I allow arbitrary strings in values, because paths can be arbitrary strings.
-Fortunately, it's relatively easy to encode any string in CSV.
-
-I don't allow arbitrary string keys, so that Bookmarks can run quick regexp
-searches over it without worrying about escaping anything.
+I allow arbitrary strings in values, because paths can be arbitrary strings
 
 #### Newlines
 
 We don't accept newlines as bookmark names or values, because the current tools
 don't allow clean separation of newlines that are a part of a filename and
-newlines that are terminating a CSV entry.
+newlines that are terminating an entry. Null delimiter support is lacking in
+the ecosystem.
 
 Implementing this in a proper programming language is out of the question,
 because I don't want to deal with non-Fisher distribution.
 
-We'll need to wait for [Csvkit to add a functionality to output CSV rows with
-NULL item deliminators](https://github.com/wireservice/csvkit/issues/1196).
-With that and `string split0`, we can implement newlines support.
-
-[fishmarks]: https://github.com/techwizrd/fishmarks
 [csvkit]: https://csvkit.readthedocs.io
 [Act]: https://github.com/nektos/act
 [Commitlint]: https://github.com/conventional-changelog/commitlint

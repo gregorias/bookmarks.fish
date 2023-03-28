@@ -2,10 +2,6 @@
 
 A [Fish] plugin for bookmarking directories.
 
-## ⚡️ Prerequisites
-
-To use Bookmarks, you need to install [csvkit].
-
 ## 📦 Installation
 
 Install this plugin with [Fisher][fisher]:
@@ -45,12 +41,12 @@ home       /Users/grzesiek
 
 ### BFDIRS
 
-Bookmarks uses `BFDIRS` variable to point to the bookmarks file
-(default `~/.bfdirs`).
+Bookmarks uses `BFDIRS` variable to point to the bookmarks file (default
+`~/.bfdirs`).
 
-The BFDIRS file is a key-value CSV file. Values represent directory paths
-and can be arbitrary strings. Keys represent bookmark names. Keys can not
-contain CSV (`"`, `,`) or regex special characters.
+The BFDIRS file is a key-value file. Each line represents a bookmark entry
+(`KEY,VALUE`). Keys and values can be arbitrary strings but keys can not
+contain commas.
 
 > **Warning**
 > Bookmarks doesn't support newlines in bookmark names or filenames. For more
@@ -63,8 +59,8 @@ problems that I had with Fishmarks:
 
 * Bookmarks has live completion that recomputes suggestions on directory
   changes.
-* Bookmarks has less restrictions on bookmark names. Particularly, it allows
-  hyphens.
+* Bookmarks has few restrictions on bookmark names. Particularly, it allows
+  hyphens and unicode characters.
 * Bookmarks has one central command with completions and help.
 * Bookmarks is compatible with Fish plugin managers like [Fisher][fisher].
 * Bookmarks is compatible with [CLI Guidelines](https://clig.dev/). It provides
@@ -73,6 +69,5 @@ problems that I had with Fishmarks:
   also conflict with Fasd.
 
 [Fish]: https://fishshell.com/
-[csvkit]: https://csvkit.readthedocs.io
 [fisher]: https://github.com/jorgebucaran/fisher
 [fishmarks]: https://github.com/techwizrd/fishmarks

@@ -1,8 +1,8 @@
 set BFDIRS (mktemp)
 set FOO (mktemp -d)
 set BAR (mktemp -d)
-echo "foo,\"$FOO\"" >$BFDIRS
-echo "bar,\"$BAR\"" >>$BFDIRS
+echo "foo,$FOO" >$BFDIRS
+echo "bar,$BAR" >>$BFDIRS
 
 cd $FOO
 bf save bar 2>/dev/null

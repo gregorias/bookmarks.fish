@@ -1,5 +1,5 @@
 set BFDIRS (mktemp)
-echo "foo,\"$BFDIRS\"" >$BFDIRS
+echo "foo,$BFDIRS" >$BFDIRS
 
 bf print bar 2>/dev/null
 @test "bf print returns an error on non-existent bookmark" $status -eq 1
