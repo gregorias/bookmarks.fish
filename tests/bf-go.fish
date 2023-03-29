@@ -11,3 +11,12 @@ echo "foo,$BFDIRS" >$BFDIRS
 echo "foo,$TMPDIR" >$BFDIRS
 bf go foo
 @test "bf go changes directory" (pwd) = "$TMPDIR"
+
+# Completions
+true >$BFDIRS
+bf save bar /bar
+bf save foo /foo
+
+@test "bf go completion suggests help options" \
+    (complete -C 'bf go -' | string collect) = "-h"\n"--help"
+@test "bf go completion suggests keys" (complete -C 'bf go ' | string collect) = "bar"\n"foo"
