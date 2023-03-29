@@ -119,7 +119,7 @@ function _bf_list_bookmarks
             "    Show this help message." \
             "" \
             "  --plain" \
-            "    Show as a CSV file."
+            "    Show as KEY,VALUE entries without markup."
     end
 
     argparse h/help plain -- $argv
