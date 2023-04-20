@@ -19,4 +19,4 @@ bf save foo /foo
 
 @test "bf go completion suggests help options" \
     (complete -C 'bf go -' | string collect) = "-h"\n"--help"
-@test "bf go completion suggests keys" (complete -C 'bf go ' | string collect) = "bar"\n"foo"
+@test "bf go completion suggests keys with hints" (complete -C 'bf go ' | string collect) = bar\t/bar\nfoo\t/foo
